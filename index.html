@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filvi's Personal site</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <pre class="ascii-title">
+ ███████╗██╗██╗     ██╗   ██╗██╗
+ ██╔════╝██║██║     ██║   ██║██║
+ █████╗  ██║██║     ██║   ██║██║
+ ██╔══╝  ██║██║     ╚██╗ ██╔╝██║
+ ██║     ██║███████╗ ╚████╔╝ ██║
+ ╚═╝     ╚═╝╚══════╝  ╚═══╝  ╚═╝
+    </pre>
+    
+    <div class="badge-container">
+        <span class="badge">🚧 SITE UNDER CONSTRUCTION 🚧</span>
+    </div>
+    
+    <div class="grid-container">
+        <div class="left-column">
+            <section>
+                <h2>About me</h2>
+                <p>From Italy :D</p>
+                <p>Learning web development and programming</p>
+                <p>Spending most of the time online</p>
+            </section>
+            
+            <section class="projects">
+                <h2>Projects</h2>
+                <div class="project-item">
+                    <h3>→ This website</h3>
+                    <p>My first personal site built with HTML & CSS</p>
+                </div>
+            </section>
+        </div>
+        
+        <div class="right-column">
+            <section>
+                <h2>Social</h2>
+                <ul>
+                    <li><a href="https://github.com/VianoFi">→ GitHub</a></li>
+                    <li><a href="https://www.instagram.com/filvi27/">→ Instagram</a></li>
+                    <li><a href="#">→ Discord</a></li>
+                    <li><a href="https://letterboxd.com/Filclan27/">→ Letterboxd</a></li>
+                </ul>
+            </section>
+            
+            <section class="now-playing">
+                <h2>Music</h2>
+                <div class="music-container">
+                    <img class="album-art" src="" alt="Album art">
+                    <div class="track-details">
+                        <p class="music-status">🎵 Loading...</p>
+                        <p class="track-info"></p>
+                    </div>
+                </div>
+            </section>
+            
+            <div class="visitor-counter">
+                <img src="https://hitscounter.dev/api/hit?url=www.filvi.it&label=Visitors%3A&icon=people-fill&color=%23b180ff&message=&style=plastic&tz=localtime" alt="Visitor counter">
+            </div>
+        </div>
+    </div>
+
+    
+    <footer>
+        <p>© 2025 FILVI | Made with HTML & CSS</p>
+    </footer>
+
+
+    <script>
+        const API_KEY = '45dc7173772b1c6d8f8db52484aaccc4';
+        const USERNAME = 'Filclan27';
+        
+        async function getRecentTrack() {
+            try {
+                const response = await fetch(`https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${USERNAME}&api_key=${API_KEY}&format=json&limit=1`);
+                const data = await response.json();
+                
+                const track = data.recenttracks.track[0];
+                const artist = track.artist['#text'];
+                const song = track.name;
+                const isNowPlaying = track['@attr'] && track['@attr'].nowplaying;
+                const albumArt = track.image[2]['#text'];
+                
+                document.querySelector('.music-status').textContent = isNowPlaying ? '🎵 Now Playing:' : '🎵 Last played:';
+                document.querySelector('.track-info').textContent = `${song} - ${artist}`;
+                
+                const albumImg = document.querySelector('.album-art');
+                if (albumArt) {
+                    albumImg.src = albumArt;
+                    albumImg.classList.add('loaded');
+                }
+            } catch (error) {
+                document.querySelector('.music-status').textContent = '🎵 Music';
+                document.querySelector('.track-info').textContent = 'Unable to load';
+            }
+        }
+        
+        getRecentTrack();
+        setInterval(getRecentTrack, 30000);
+    </script>
+</body>
+</html>
