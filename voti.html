@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calcolatore Voti</title>
+</head>
+<body>
+    <h2>Calcolatore Euro da Voti</h2>
+    <p>Inserisci 11 voti (da 2 a 10):</p>
+    
+    <div id="inputArea">
+        <label id="label">Inserire il 1° voto:</label><br>
+        <input type="number" id="votoInput" step="0.1" min="2" max="10">
+        <button onclick="inserisciVoto()">Inserisci</button>
+    </div>
+    
+    <p id="messaggio"></p>
+    <p id="risultato"></p>
+
+    <script>
+        let euro = 0.0;
+        let cont = 1;
+
+        function inserisciVoto() {
+            const input = document.getElementById('votoInput');
+            const voto = parseFloat(input.value);
+            const messaggio = document.getElementById('messaggio');
+            
+            if (isNaN(voto)) {
+                messaggio.textContent = "Valore non valido. Riprovare.";
+                messaggio.style.color = "red";
+                return;
+            }
+            
+            if (voto < 2 || voto > 10) {
+                messaggio.textContent = "Valore non valido. Riprovare.";
+                messaggio.style.color = "red";
+                return;
+            }
+            
+            // Calcolo euro
+            if (voto >= 6) {
+                euro += (voto - 5);
+            }
+            if (voto <= 5) {
+                euro += (4 * voto) - 27;
+            }
+            if (5 < voto && voto < 6) {
+                euro += (8 * voto) - 47;
+            }
+            
+            cont++;
+            messaggio.textContent = "";
+            input.value = "";
+            
+            if (cont <= 11) {
+                document.getElementById('label').textContent = `Inserire il ${cont}° voto:`;
+            } else {
+                euro += 5;
+                document.getElementById('inputArea').style.display = 'none';
+                document.getElementById('risultato').innerHTML = 
+                    `<strong>I soldi che dovete dare a vostro figlio sono ${euro.toFixed(2)} € :)</strong>`;
+            }
+        }
+        
+        // Permette di premere Invio per inserire
+        document.getElementById('votoInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                inserisciVoto();
+            }
+        });
+    </script>
+</body>
+</html>
